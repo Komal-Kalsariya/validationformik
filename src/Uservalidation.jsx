@@ -8,12 +8,16 @@ const Uservalidation = () => {
         .max(10)
         .required("User name must be at 10 character"),
         email: Yup.string()
-        .email("enter valid email")
-        .required("enter email address"),
+         .email("enter valid email address")
+        .matches ("(^[a-z0-9]+@[a-z]+\.[a-z]{2,3})" ,"regex")
+        .required("enter email address")
+        ,
         password: Yup.string()
-        .min(6)
-        .max(16)
-        .required("password  must be at least 6 digit"),
+        .min(8)
+        .max(20)
+        .matches("(^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$)","regex")
+    
+        .required("password must be 8 character like albhabets special charater and digits"),
     })
     let formdata = useFormik({
         initialValues: {
@@ -30,27 +34,49 @@ const Uservalidation = () => {
     })
     return (
         <div>
+            <h2 className='text-center p-4 text-decoration-underline text-uppercase text-info'>ValidationForm</h2>
             <form className='w-25' onSubmit={formdata.handleSubmit}>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" className="form-label">Username</label>
-                    <input type="text" className="form-control" id="exampleInputEmail1"
+                    <input type="text" className={`form-control ${ formdata.touched.username&&
+                            formdata.errors.username ?"error":null}`} id="exampleInputEmail1"
                         aria-describedby="emailHelp" value={formdata.values.username} name='username'
                         onChange={formdata.handleChange} onBlur={formdata.handleBlur} />
+                        {
+                            formdata.touched.username&&
+                            formdata.errors.username
+                            ?<p style={{color:"red"}}>{formdata.errors.username}</p>
+                            :null
+                        }
 
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" className="form-label">Email address</label>
-                    <input type="email" className="form-control" id="exampleInputEmail1"
+                    <input type="email" className={`form-control ${ formdata.touched.email&&
+                            formdata.errors.email ?"error":null}`} id="exampleInputEmail1"
                         aria-describedby="emailHelp" value={formdata.values.email} name='email'
                         onChange={formdata.handleChange} onBlur={formdata.handleBlur} />
+                         {
+                            formdata.touched.email&&
+                            formdata.errors.email
+                            ?<p style={{color:"red"}}>{formdata.errors.email}</p>
+                            :null
+                        }
 
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" className="form-label">Password</label>
-                    <input type="text" className="form-control" id="exampleInputPassword1"
+                    <input type="text" className={`form-control ${ formdata.touched.password&&
+                            formdata.errors.password ?"error":null}`} id="exampleInputPassword1"
                         value={formdata.values.password} name='password'
                         onChange={formdata.handleChange}
                         onBlur={formdata.handleBlur} />
+                         {
+                            formdata.touched.password&&
+                            formdata.errors.password
+                            ?<p style={{color:"red"}}>{formdata.errors.password}</p>
+                            :null
+                        }
                 </div>
 
                 <button type="submit" className="btn btn-primary">Submit</button>
